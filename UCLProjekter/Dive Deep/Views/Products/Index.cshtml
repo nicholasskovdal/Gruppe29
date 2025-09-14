@@ -1,0 +1,56 @@
+﻿@model IEnumerable<Product>
+@section title {
+    <h2>@ViewData["Title"]</h2>
+}
+
+
+@if (Model != null)
+{
+    <div class="container mt-4">
+        <div class="row">
+            @foreach (var product in Model)
+            {
+                switch (product)
+                {
+                    case BCD bcd:
+                        <div class="col-md-3 mb-4">
+                            <div class="card" style="width: 18rem;">
+                                <img src="~/images/BCD_IMAGE.jpg" class="card-img-top" alt="Image of a BCD vest used for diving">
+                                <div class="card-body">
+                                    <h5 class="card-title">@bcd.Model</h5>
+                                    <p class="card-text">@bcd.Brand</p>
+                                </div>
+                                <div class="card-footer">
+                                    <h6 class="card-subtitle">@bcd.PricePerDay,- kr. pr. dag</h6>
+                                </div>
+                            </div>
+                        </div>
+                        break;
+
+                    case DivingSuit suit:
+                        <div class="col-md-3 mb-4">
+                            <div class="card" style="width: 18rem;">
+                                <img src="~/images/DIVINGSUIT_IMAGE.jpg" class="card-img-top" alt="Image of a wetsuit with short sleeves and legs">
+                                <div class="card-body">
+                                    <h5 class="card-title">@suit.Model</h5>
+                                    <p class="card-text">@suit.Brand</p>
+                                </div>
+                                <div class="card-footer">
+                                    <h6 class="card-subtitle">@suit.PricePerDay,- kr. pr. dag</h6>
+                                </div>
+                            </div>
+                        </div>
+                        break;
+
+                    case Tank tank:
+
+                        break;
+
+                    case RegulatorSet regulatorSet:
+
+                        break;
+                }
+            }
+        </div>
+    </div>
+}

@@ -1,0 +1,80 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dive Deep udlejning</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css" />
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/home/index">Hjem</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Produkter
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="bcd">BCD</a></li>
+                            <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="divingsuit">Dykkerdragter</a></li>
+                            <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="tank">Tanke</a></li>
+                            <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="regulatorset">Regulatorsæt</a></li>
+                            <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="masksnorkel">Maske/Snorkel</a></li>
+                            <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="finns">Finner</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-fill container">
+        <div class="container">
+            @RenderSection("title", false)
+        </div>
+        <div class="container">
+            @RenderBody()
+        </div>
+    </main>
+
+
+
+
+    <footer class="bg-dark text-white text-center py-3 small mt-auto">
+        <div class="container">
+            <div class="row">
+                <!-- Henvendelser -->
+                <div class="col-md-6 mb-3">
+                    <h5>Henvendelser</h5>
+                    <p>
+                        Dykkervej 10<br>
+                        5000 Odense C
+                    </p>
+                    <p><i class="bi bi-envelope-fill"></i> info@divedeep.dk</p>
+                    <p><i class="bi bi-telephone-fill"></i> +45 60708090</p>
+                    <p>CVR: 81828384</p>
+                </div>
+
+                <!-- Åbningstider -->
+                <div class="col-md-6 mb-3">
+                    <h5>Åbningstider</h5>
+                    <p>
+                        Mandag - fredag: 10:00 - 17:30<br>
+                        Lørdag: 10:00 - 14:00<br>
+                        Søndag: Lukket
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.js"></script>
+</body>
+</html>
