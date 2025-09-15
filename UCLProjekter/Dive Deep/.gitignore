@@ -1,0 +1,29 @@
+## Build output
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+
+## Visual Studio files
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## Visual Studio Code
+.vscode/
+
+## NuGet
+*.nupkg
+*.snupkg
+*.nuspec
+*.psmdcp
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## Other
+*.db
+*.log
+*.tmp
