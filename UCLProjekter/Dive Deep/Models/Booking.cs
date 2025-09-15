@@ -2,19 +2,19 @@
 
 namespace Dive_Deep.Models
 {
-    public abstract class Product
+    public class Booking
     {
-        public int ProductId { get; set; }
+        public int BookingId { get; set; }
 
         [Required]
-        public string Brand { get; set; }
+        public DateTime StartTime { get; set; }
 
         [Required]
-        public int PricePerDay { get; set; }
+        public DateTime EndTime { get; set; }
 
 
         //Nav property
         public ICollection<ProductBooking> ProductBookings { get; set; }
 
-    }
+    }   
 }

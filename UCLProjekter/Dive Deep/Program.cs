@@ -1,3 +1,6 @@
+using Dive_Deep.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace Dive_Deep
 {
     public class Program
@@ -5,6 +8,12 @@ namespace Dive_Deep
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddDbContext<DiveDeepContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DiveDeepConnection"));
+            });
+
             builder.Services.AddControllersWithViews(); //ikke default
             var app = builder.Build();
 
