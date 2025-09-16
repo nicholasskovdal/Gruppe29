@@ -22,7 +22,7 @@ namespace Dive_Deep.Persistence
 
         public Task<IEnumerable<T>> GetAllOfTypeAsync<T>() where T : Product
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("data");
         }
 
         public Task<Product?> GetByIdAsync(int productId)
