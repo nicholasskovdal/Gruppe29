@@ -1,4 +1,5 @@
 using Dive_Deep.Data;
+using Dive_Deep.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dive_Deep
@@ -13,6 +14,8 @@ namespace Dive_Deep
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DiveDeepConnection"));
             });
+            builder.Services.AddScoped<IProductRepository,  ProductRepository>();
+
 
             builder.Services.AddControllersWithViews(); //ikke default
             var app = builder.Build();

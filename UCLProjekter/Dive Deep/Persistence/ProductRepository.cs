@@ -1,38 +1,59 @@
-﻿using Dive_Deep.Models;
+﻿using Dive_Deep.Data;
+using Dive_Deep.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace Dive_Deep.Persistence
 {
     public class ProductRepository : IProductRepository
     {
-        public Task AddAsync(Product product)
+        private readonly DiveDeepContext _context;
+        public ProductRepository(DiveDeepContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task DeleteAsync(int productId)
+        //Create
+        public async Task AddAsync(Product product)
         {
-            throw new NotImplementedException();
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<Product>> GetAllAsync()
+        //Reads
+        public async Task<IEnumerable<Product>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Products.ToListAsync();
         }
 
-        public Task<IEnumerable<T>> GetAllOfTypeAsync<T>() where T : Product
+        public async Task<IEnumerable<T>> GetAllOfTypeAsync<T>() where T : Product
         {
-            throw new NotImplementedException("data");
+            return await _context.Set<T>().ToListAsync();
         }
 
-        public Task<Product?> GetByIdAsync(int productId)
+        public async Task<Product?> GetByIdAsync(int productId)
         {
-            throw new NotImplementedException();
+            return await _context.Products.FindAsync(productId);
         }
 
-        public Task UpdateAsync(Product product)
+
+        //Update
+        public async Task UpdateAsync(Product product)
         {
-            throw new NotImplementedException();
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync();
+        }
+
+
+        //Delete
+        public async Task DeleteAsync(int productId)
+        {
+            var product = await GetByIdAsync(productId);
+            if (product != null)
+            {
+                _context.Products.Remove(product);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }
