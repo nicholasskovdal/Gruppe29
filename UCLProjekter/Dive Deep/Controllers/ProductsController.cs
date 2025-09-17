@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
+
 namespace Dive_Deep.Controllers
 {
     public class ProductsController : Controller
@@ -14,7 +15,7 @@ namespace Dive_Deep.Controllers
         {
             _context = context;
         }
-        public IActionResult Index(string category)
+        public async Task<IActionResult> Index(string category)
         {
             IQueryable<Product> products = _context.Products;
 
@@ -23,29 +24,29 @@ namespace Dive_Deep.Controllers
                 switch (category.ToLower())
                 {
                     case "bcd":
-                        products = _context.BCDs;
+                        products = _context.Products.OfType<BCD>();
                         break;
                     case "divingsuit":
-                        products = _context.BCDs;
+                        products = _context.Products.OfType<DivingSuit>();
                         break;
                     case "tank":
-                        products = _context.Tanks;
+                        products = _context.Products.OfType<Tank>();
                         break;
                     case "fins":
-                        products = _context.Finns;
+                        products = _context.Products.OfType<Finns>();
                         break;
                     case "mask":
-                        products = _context.MaskSnorkels;
+                        products = _context.Products.OfType<MaskSnorkel>();
                         break;
                     case "regulator":
-                        products = _context.RegulatorSets;
+                        products = _context.Products.OfType<RegulatorSet>();
                         break;
                 }
             }
 
             // Gruppér på Brand+Model så du kun får én per kort
             var grouped = await products
-                .GroupBy(p => new { p.Brand, p.Model })
+                .GroupBy(p => new { p.Brand})
                 .Select(g => g.First())  // tager bare en repræsentant
                 .ToListAsync();
 
