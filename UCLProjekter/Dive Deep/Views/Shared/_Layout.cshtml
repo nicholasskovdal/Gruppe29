@@ -7,7 +7,7 @@
     <title>@ViewData["Title"] - Dive Deep</title>
 
     <!-- Bootstrap Theme CSS -->
-    <link href="~lib/bootstrap/css/styles.css" rel="stylesheet" />
+    <link href="lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <!-- evt css-filer -->
 </head>
 <body id="page-top">
@@ -23,7 +23,7 @@
                             Produkter
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="bcd">BCD</a></li>
+                            <li><a class="dropdown-item" asp-controller="Products" asp-action="Index" asp-route-category="bcd" >BCD</a></li>
                             <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="divingsuit">Dykkerdragter</a></li>
                             <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="tank">Tanke</a></li>
                             <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="regulatorset">Regulatorsæt</a></li>
@@ -46,7 +46,7 @@
     </main>
 
     <!-- Bootstrap Theme JS -->
-    <script src="~lib/boostrap/js/Scripts.js"></script>
+    <script src="lib/boostrap/js/bootstrap.js"></script>
     <!-- evt. flere js-filer -->
 </body>
 </html>
