@@ -13,14 +13,14 @@ namespace Dive_Deep.Persistence
             _context = context;
         }
 
-        
+
         public async Task AddAsync(Product product)
         {
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
         }
 
-        
+
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
             return await _context.Products.ToListAsync();
@@ -37,7 +37,7 @@ namespace Dive_Deep.Persistence
         }
 
 
-        
+
         public async Task UpdateAsync(Product product)
         {
             _context.Products.Update(product);
@@ -45,7 +45,7 @@ namespace Dive_Deep.Persistence
         }
 
 
-        
+
         public async Task DeleteAsync(int productId)
         {
             var product = await GetByIdAsync(productId);
@@ -94,6 +94,42 @@ namespace Dive_Deep.Persistence
                         .ToListAsync();
             }
             return new List<Product>();
+        }
+
+        public async Task<IEnumerable<Product>> GetAllProductsInSameGroup(Product product)
+        {
+            IEnumerable<Product> variants;
+            switch (product)
+            {
+                case BCD bcd:
+                    return variants = await _context.BCDs
+                        .Where(b => b.Brand == bcd.Brand && b.Model == bcd.Model)
+                        .ToListAsync();
+                case DivingSuit divingSuit:
+                    return variants = await _context.DivingSuits
+                        .Where(d => d.Brand == divingSuit.Brand && d.Model == divingSuit.Model)
+                        .ToListAsync();
+                case MaskSnorkel maskSnorkel:
+                    return variants = await _context.MaskSnorkels
+                        .Where(m => m.Brand == maskSnorkel.Brand && m.Model == maskSnorkel.Model)
+                        .ToListAsync();
+                case Finns finns:
+                    return variants = await _context.Finns
+                        .Where(f => f.Brand == finns.Brand && f.Model == finns.Model)
+                        .ToListAsync();
+                case Tank tanks:
+                    return variants = await _context.Tanks
+                        .Where(t => t.Brand == tanks.Brand && t.Volume == tanks.Volume)
+                        .ToListAsync();
+                case RegulatorSet regulatorSets:
+                    return variants = await _context.RegulatorSets
+                        .Where(r => r.Brand == regulatorSets.Brand && r.FirstStep == regulatorSets.FirstStep)
+                        .ToListAsync();
+                default:
+                    variants = new List<Product>();
+                    break;
+            }
+            return variants = new List<Product>();
         }
     }
 }

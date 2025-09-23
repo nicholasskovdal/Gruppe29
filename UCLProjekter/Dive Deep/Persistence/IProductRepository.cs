@@ -21,5 +21,7 @@ namespace Dive_Deep.Persistence
         //Get products in grouped categories to show in view
         Task<IEnumerable<Product>> GetGroupedProductsByCategory(string category);
 
+        Task<IEnumerable<Product>> GetAllProductsInSameGroup(Product product);
+
     }
 }

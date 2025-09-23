@@ -1,5 +1,6 @@
 ﻿using Dive_Deep.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace Dive_Deep.Data
 {
@@ -13,7 +14,17 @@ namespace Dive_Deep.Data
 
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Product> Products { get; set; }
+
+        public DbSet<BCD> BCDs { get; set; }
+        public DbSet<DivingSuit> DivingSuits { get; set; }
+        public DbSet<Tank> Tanks { get; set; }
+        public DbSet<RegulatorSet> RegulatorSets { get; set; }
+        public DbSet<MaskSnorkel> MaskSnorkels { get; set; }
+        public DbSet<Finns> Finns { get; set; }
+
         public DbSet<ProductBooking> ProductBookings { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,6 +46,16 @@ namespace Dive_Deep.Data
                 .HasOne(pb => pb.Booking)
                 .WithMany(b => b.ProductBookings)
                 .HasForeignKey(pb => pb.BookingId);
+
+            modelBuilder.Entity<Cart>()
+                .HasMany(c => c.Items)
+                .WithOne(i => i.Cart)
+                .HasForeignKey(i => i.CartId);
+            
+            modelBuilder.Entity<CartItem>()
+                .HasOne(i => i.Product)
+                .WithMany()
+                .HasForeignKey(i => i.ProductId);
                 
 
             modelBuilder.Entity<BCD>().HasData(
