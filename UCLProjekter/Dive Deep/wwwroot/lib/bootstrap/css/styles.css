@@ -84,11 +84,33 @@
 *::after {
     box-sizing: border-box;
 }
+.no-timeline::after {
+    display: none;
+}
 
 @media (prefers-reduced-motion: no-preference) {
     :root {
         scroll-behavior: smooth;
     }
+}
+html {
+    scroll-behavior: smooth;
+}
+.fa-stack {
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+    .fa-stack:hover {
+        transform: scale(1.1);
+        cursor: pointer;
+    }
+
+.masthead {
+    background-image: src("/assets/img/DeepDiveHeader.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
 }
 
 body {
@@ -12751,7 +12773,7 @@ header.masthead {
             color: white;
             border: 7px solid #e9ecef;
             border-radius: 100%;
-            background-color: #ffc800;
+            background-color: #415b9e;
         }
 
             .timeline > li .timeline-image h4, .timeline > li .timeline-image .h4 {
