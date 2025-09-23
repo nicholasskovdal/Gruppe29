@@ -11,7 +11,39 @@
     <!-- evt css-filer -->
 </head>
 <body id="page-top">
-    @RenderBody()
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" asp-controller="Home" asp-action="Index">Hjem</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Produkter
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="bcd">BCD</a></li>
+                            <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="divingsuit">Dykkerdragter</a></li>
+                            <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="tank">Tanke</a></li>
+                            <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="regulatorset">Regulatorsæt</a></li>
+                            <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="masksnorkel">Maske/Snorkel</a></li>
+                            <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="finns">Finner</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            @RenderSection("title", false)
+        </div>
+        <div>
+            @RenderBody()
+        </div>
+    </main>
 
     <!-- Bootstrap Theme JS -->
     <script src="~lib/boostrap/js/Scripts.js"></script>
