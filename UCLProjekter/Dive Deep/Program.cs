@@ -15,6 +15,7 @@ namespace Dive_Deep
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DiveDeepConnection"));
             });
             builder.Services.AddScoped<IProductRepository,  ProductRepository>();
+            builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 
 
             builder.Services.AddControllersWithViews(); //ikke default

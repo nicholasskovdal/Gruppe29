@@ -55,5 +55,45 @@ namespace Dive_Deep.Persistence
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<IEnumerable<Product>> GetGroupedProductsByCategory(string category)
+        {
+            category = category.ToLower();
+
+            switch (category)
+            {
+                case "bcd":
+                    return await _context.Set<BCD>()
+                        .GroupBy(b => new { b.Brand, b.Model })
+                        .Select(g => g.First())
+                        .ToListAsync();
+                case "divingsuit":
+                    return await _context.Set<DivingSuit>()
+                        .GroupBy(d => new { d.Brand, d.Model })
+                        .Select(g => g.First())
+                        .ToListAsync();
+                case "masksnorkel":
+                    return await _context.Set<MaskSnorkel>()
+                        .GroupBy(m => new { m.Brand, m.Model })
+                        .Select(g => g.First())
+                        .ToListAsync();
+                case "finns":
+                    return await _context.Set<Finns>()
+                        .GroupBy(f => new { f.Brand, f.Model })
+                        .Select(g => g.First())
+                        .ToListAsync();
+                case "tank":
+                    return await _context.Set<Tank>()
+                        .GroupBy(t => new { t.Brand, t.Volume })
+                        .Select(g => g.First())
+                        .ToListAsync();
+                case "regulatorset":
+                    return await _context.Set<RegulatorSet>()
+                        .GroupBy(r => new { r.Brand, r.FirstStep })
+                        .Select(g => g.First())
+                        .ToListAsync();
+            }
+            return new List<Product>();
+        }
     }
 }

@@ -18,5 +18,8 @@ namespace Dive_Deep.Persistence
         //Delete
         Task DeleteAsync(int productId);
 
+        //Get products in grouped categories to show in view
+        Task<IEnumerable<Product>> GetGroupedProductsByCategory(string category);
+
     }
 }
