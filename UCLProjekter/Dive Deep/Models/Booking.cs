@@ -13,8 +13,11 @@ namespace Dive_Deep.Models
         public DateTime EndTime { get; set; }
 
 
-        //Nav property
+        //Nav properties
         public ICollection<ProductBooking> ProductBookings { get; set; }
+        public ApplicationUser? ApplicationUser { get; set; }
+        public string? ApplicationUserId { get; set; }
+
 
     }   
 }

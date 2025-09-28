@@ -3,10 +3,7 @@
     public class Cart
     {
 
-        public int CartId { get; set; }
-
-        //Navigation Properties
-        //public string? ApplicationUserId { get; set; }
+        public int CartId { get; set; }        
         public ICollection<CartItem> Items { get; set; } = new List<CartItem>();
 
     }

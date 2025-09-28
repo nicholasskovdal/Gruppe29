@@ -1,10 +1,11 @@
 ﻿using Dive_Deep.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace Dive_Deep.Data
 {
-    public class DiveDeepContext : DbContext
+    public class DiveDeepContext : IdentityDbContext
     {
 
         public DiveDeepContext(DbContextOptions<DiveDeepContext> options) : base(options)
@@ -28,6 +29,8 @@ namespace Dive_Deep.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<BCD>().ToTable("BCDs");
             modelBuilder.Entity<DivingSuit>().ToTable("DivingSuits");
             modelBuilder.Entity<Tank>().ToTable("Tanks");
@@ -56,6 +59,11 @@ namespace Dive_Deep.Data
                 .HasOne(i => i.Product)
                 .WithMany()
                 .HasForeignKey(i => i.ProductId);
+
+            modelBuilder.Entity<Booking>()
+                .HasOne<ApplicationUser>(b => b.ApplicationUser)
+                .WithMany(a => a.Bookings)
+                .HasForeignKey(b => b.ApplicationUserId);
                 
 
             modelBuilder.Entity<BCD>().HasData(
