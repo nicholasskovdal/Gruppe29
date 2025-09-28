@@ -1,0 +1,35 @@
+﻿@model Cart
+
+<div class="container">
+    @if (Model.Items.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Produkt</th>
+                    <th>Pris pr. dag</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>@item.Product.Brand</td>
+                        <td>@item.Product.PricePerDay kr.</td>
+                        <td>
+                            <form asp-action="Remove" method="post">
+                                <input type="hidden" name="itemId" value="@item.CartItemId" />
+                                <button type="submit" class="btn btn-danger btn-sm">Fjern</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Din kurv er tom.</p>
+    }
+</div>

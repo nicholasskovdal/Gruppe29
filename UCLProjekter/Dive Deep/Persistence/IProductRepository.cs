@@ -23,5 +23,7 @@ namespace Dive_Deep.Persistence
 
         Task<IEnumerable<Product>> GetAllProductsInSameGroup(Product product);
 
+        Task<DivingSuit?> FindMatchingDivingSuitAsync(string brand, string model, string size, string gender, string? thickness);
+
     }
 }

@@ -131,5 +131,15 @@ namespace Dive_Deep.Persistence
             }
             return variants = new List<Product>();
         }
+
+        public async Task<DivingSuit?> FindMatchingDivingSuitAsync(string brand, string model, string size, string gender, string? thickness)
+        {
+            return await _context.DivingSuits.FirstOrDefaultAsync(d =>
+                d.Brand == brand &&
+                d.Model == model &&
+                d.Sizes == size &&
+                d.Gender == gender &&
+                (string.IsNullOrEmpty(thickness) || d.Thickness.ToString() == thickness));
+        }
     }
 }
