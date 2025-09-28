@@ -1,35 +1,46 @@
-﻿@model Cart
+﻿@model CartViewModel
 
 <div class="container">
-    @if (Model.Items.Any())
-    {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Produkt</th>
-                    <th>Pris pr. dag</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.Items)
-                {
-                    <tr>
-                        <td>@item.Product.Brand</td>
-                        <td>@item.Product.PricePerDay kr.</td>
-                        <td>
-                            <form asp-action="Remove" method="post">
-                                <input type="hidden" name="itemId" value="@item.CartItemId" />
-                                <button type="submit" class="btn btn-danger btn-sm">Fjern</button>
-                            </form>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <p>Din kurv er tom.</p>
-    }
+    <div class="row">
+        <!-- Venstre: kurv -->
+        <div class="col-md-6">
+            <h3>Din kurv</h3>
+            @if (Model.Items.Any())
+            {
+                <ul class="list-group">
+                    @foreach (var item in Model.Items)
+                    {
+                        <li class="list-group-item">
+                            <strong>@item.Brand</strong> (@item.ProductType) <br />
+                            @item.Details <br />
+                            <span>@item.PricePerDay kr/dag</span>
+                        </li>
+                    }
+                </ul>
+                <p class="mt-3"><strong>Total pr. dag:</strong> @Model.TotalPricePerDay kr</p>
+            }
+            else
+            {
+                <p>Din kurv er tom.</p>
+            }
+        </div>
+
+        <!-- Højre: booking form -->
+        <div class="col-md-6">
+            <h3>Opret booking</h3>
+            <form asp-controller="Bookings" asp-action="Add" method="post">
+                <div class="mb-3">
+                    <label asp-for="StartTime" class="form-label">Starttidspunkt</label>
+                    <input asp-for="StartTime" type="datetime-local" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="EndTime" class="form-label">Sluttidspunkt</label>
+                    <input asp-for="EndTime" type="datetime-local" class="form-control" />
+                </div>
+
+                <button type="submit" class="btn btn-primary">Book nu</button>
+            </form>
+        </div>
+    </div>
 </div>

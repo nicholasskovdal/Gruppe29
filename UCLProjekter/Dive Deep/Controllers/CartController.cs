@@ -1,5 +1,6 @@
 ﻿using Dive_Deep.Data;
 using Dive_Deep.Models;
+using Dive_Deep.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -33,12 +34,40 @@ namespace Dive_Deep.Controllers
 
             if (cart == null)     //-------------------------------------------------------------------opret cart til brugeren i db hvis der ikke er en
             {
-                cart = new Cart { ApplicationUserId = user.Id };
-                _context.Carts.Add(cart);
-                await _context.SaveChangesAsync();
+                return View(new CartViewModel());
             }
 
-            return View(cart);
+            var items = cart.Items.Select(i =>
+            {
+                string details = i.Product switch
+                {
+                    BCD bcd => $"Model: {bcd.Model}, Str.: {bcd.Sizes}",
+                    DivingSuit suit => $"Model: {suit.Model}, Str.: {suit.Sizes}, Køn: {suit.Gender}, {suit.Thickness}mm",
+                    Tank tank => $"{tank.Volume} L",
+                    RegulatorSet reg => $"1. trin: {reg.FirstStep}, 2. trin: {reg.SecondStep}",
+                    MaskSnorkel mask => $"Model: {mask.Model}",
+                    Finns fins => $"Model: {fins.Model}, Str.: {fins.Sizes}",
+                    _ => "Detaljer ikke tilgængelige"
+                };
+
+                return new CartItemViewModel
+                {
+                    CartItemId = i.CartItemId,
+                    Brand = i.Product.Brand,
+                    ProductType = i.Product.GetType().Name,
+                    Details = details,
+                    PricePerDay = i.Product.PricePerDay
+                };
+            }).ToList();
+
+            var vm = new CartViewModel
+            {
+                Items = items,
+                TotalPricePerDay = items.Sum(x => x.PricePerDay)
+            };
+
+
+            return View(vm);
         }
 
 

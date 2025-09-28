@@ -1,8 +1,11 @@
 ﻿using Dive_Deep.Models;
 using Dive_Deep.Persistence;
+using Dive_Deep.Services;
+using Dive_Deep.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 
 namespace Dive_Deep.Controllers
 {
@@ -12,11 +15,14 @@ namespace Dive_Deep.Controllers
         private readonly IBookingRepository _bookingRepo;
         private readonly IProductRepository _productRepo;
         private readonly UserManager<ApplicationUser> _userManager;
-        public BookingsController(IBookingRepository bookingRepo, IProductRepository productRepo, UserManager<ApplicationUser> userManager)
+        private readonly BookingService _bookingService;
+
+        public BookingsController(IBookingRepository bookingRepo, IProductRepository productRepo, UserManager<ApplicationUser> userManager, BookingService bookingService)
         {
             _bookingRepo = bookingRepo;
             _productRepo = productRepo;
             _userManager = userManager;
+            _bookingService = bookingService;
         }
 
 
@@ -37,6 +43,22 @@ namespace Dive_Deep.Controllers
                     .ToList();
                 return View(bookings);
             }
+        }
+
+        public async Task<IActionResult> Add(CartViewModel model)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            var result = await _bookingService.TryCreateBookingAsync(user,   model.StartTime ?? DateTime.MinValue,    model.EndTime ?? DateTime.MinValue);
+
+            if (!result.Success)
+            {
+                TempData["Error"] = result.ErrorMessage;
+                return RedirectToAction("Index", "Cart");
+            }
+
+            TempData["Success"] = "Booking oprettet!";
+            return RedirectToAction("Index", "Bookings");
         }
     }
 }

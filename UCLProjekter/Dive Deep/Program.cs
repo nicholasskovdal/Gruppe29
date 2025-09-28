@@ -1,6 +1,7 @@
 using Dive_Deep.Data;
 using Dive_Deep.Models;
 using Dive_Deep.Persistence;
+using Dive_Deep.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +24,7 @@ namespace Dive_Deep
 
             builder.Services.AddScoped<IProductRepository, ProductRepository>(); //ikke default
             builder.Services.AddScoped<IBookingRepository, BookingRepository>(); //ikke default
+            builder.Services.AddScoped<BookingService>();
 
 
             builder.Services.AddControllersWithViews(); //ikke default
