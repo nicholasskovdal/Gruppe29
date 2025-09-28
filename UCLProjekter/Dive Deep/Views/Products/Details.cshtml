@@ -55,7 +55,7 @@
 
 
             <!--HERFRA-->
-            <form method="post" asp-controller="Cart" asp-action="Add" class="mt-4">
+            <form method="post" asp-controller="Cart" asp-action="Add" asp-route-productId="@Model.Representative.ProductId"class="mt-4">
                 <input type="hidden" asp-for="SelectedProductId"/>
                 @if (Model.Representative is BCD)
                 {
