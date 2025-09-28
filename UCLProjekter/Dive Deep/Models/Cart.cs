@@ -6,5 +6,8 @@
         public int CartId { get; set; }        
         public ICollection<CartItem> Items { get; set; } = new List<CartItem>();
 
+        public string ApplicationUserId { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
+
     }
 }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Dive_Deep.Data
 {
-    public class DiveDeepContext : IdentityDbContext
+    public class DiveDeepContext : IdentityDbContext<ApplicationUser>
     {
 
         public DiveDeepContext(DbContextOptions<DiveDeepContext> options) : base(options)
@@ -55,10 +55,15 @@ namespace Dive_Deep.Data
                 .WithOne(i => i.Cart)
                 .HasForeignKey(i => i.CartId);
             
-            modelBuilder.Entity<CartItem>()
+            modelBuilder.Entity<CartItem>() //WithMany() er tom fordi en CartItem kan et Product kan være i MANGE CartItems
                 .HasOne(i => i.Product)
                 .WithMany()
                 .HasForeignKey(i => i.ProductId);
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasOne(a => a.Cart)
+                .WithOne(c => c.ApplicationUser)
+                .HasForeignKey<Cart>(c => c.ApplicationUserId);
 
             modelBuilder.Entity<Booking>()
                 .HasOne<ApplicationUser>(b => b.ApplicationUser)

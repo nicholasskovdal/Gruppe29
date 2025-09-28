@@ -7,46 +7,60 @@
     <title>@ViewData["Title"] - Dive Deep</title>
 
     <!-- Bootstrap Theme CSS -->
-    <link href="lib/bootstrap/css/bootstrap.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+
+
     <!-- evt css-filer -->
 </head>
-<body id="page-top">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" asp-controller="Home" asp-action="Index">Hjem</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Produkter
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" asp-controller="Products" asp-action="Index" asp-route-category="bcd" >BCD</a></li>
-                            <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="divingsuit">Dykkerdragter</a></li>
-                            <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="tank">Tanke</a></li>
-                            <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="regulatorset">Regulatorsæt</a></li>
-                            <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="masksnorkel">Maske/Snorkel</a></li>
-                            <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="finns">Finner</a></li>
-                        </ul>
-                    </li>
-                </ul>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" asp-controller="Home" asp-action="Index">Hjem</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Produkter
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-controller="Products" asp-action="Index" asp-route-category="bcd">BCD</a></li>
+                                <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="divingsuit">Dykkerdragter</a></li>
+                                <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="tank">Tanke</a></li>
+                                <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="regulatorset">Regulatorsæt</a></li>
+                                <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="masksnorkel">Maske/Snorkel</a></li>
+                                <li><a class="dropdown-item" asp-controller="products" asp-action="Index" asp-route-category="finns">Finner</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" asp-controller="Bookings" asp-action="Index">Bookings</a>
+                        </li>
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+
             </div>
-        </div>
-    </nav>
+        </nav>
+    </header>
 
     <main>
-        <div class="container">
-            @RenderSection("title", false)
-        </div>
         <div>
-                @RenderBody()          
+            @RenderBody()
         </div>
     </main>
+
 
     <!-- Bootstrap Theme JS -->
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- evt. flere js-filer -->
+
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
