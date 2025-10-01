@@ -55,65 +55,78 @@
 
 
             <!--HERFRA-->
-            <form method="post" asp-controller="Cart" asp-action="Add" asp-route-productId="@Model.Representative.ProductId"class="mt-4">
-                <input type="hidden" asp-for="SelectedProductId"/>
+            <form method="post" asp-controller="Cart" asp-action="Add" class="mt-4">
+                @Html.AntiForgeryToken()
+
+                <!-- Bruges kun til redirect/fejl hvis lookup fejler -->
+                <input type="hidden" name="representativeId" value="@Model.Representative.ProductId" />
+                <input type="hidden" name="brand" value="@Model.Representative.Brand" />
+                <input type="hidden" name="model" value="@Model.RepresentativeSecondaryValue" />
+
                 @if (Model.Representative is BCD)
                 {
                     <div class="mb-3">
-                        <label asp-for="SelectedProductId">Størrelse</label>
-                        <select asp-for="SelectedProductId" asp-items="@(new SelectList(Model.Variants.OfType<BCD>(), "ProductId", "Sizes"))" class="form-select"></select>
-
+                        <label>Størrelse</label>
+                        <select name="selectedProductId" class="form-select"
+                                asp-items="@(new SelectList(Model.Variants.OfType<BCD>(), "ProductId", "Sizes"))">
+                            <option value="">-- Vælg --</option>
+                        </select>
                     </div>
                 }
                 else if (Model.Representative is DivingSuit)
                 {
-                    var ds = Model.Representative as DivingSuit;
-
                     <div class="mb-3">
-                        <strong>Type:</strong> @ds.Type
-                    </div>
+                        <label>Størrelse</label>
+                        <select name="selectedSize" class="form-select">
+                            <option value="">-- Vælg --</option>
+                            @foreach (var s in Model.Sizes)
+                            {
+                                <option value="@s">@s</option>
+                            }
+                        </select>
 
-                    <div class="mb-3">
-                    <label asp-for="SelectedSize">Størrelse</label>
-                    <select asp-for="SelectedSize" asp-items="@(new SelectList(Model.Sizes))" class="form-select"></select>
+                        <label class="mt-2">Køn</label>
+                        <select name="selectedGender" class="form-select">
+                            <option value="">-- Vælg --</option>
+                            @foreach (var g in Model.Genders)
+                            {
+                                <option value="@g">@g</option>
+                            }
+                        </select>
 
-                    <label asp-for="SelectedGender">Køn</label>
-                    <select asp-for="SelectedGender" asp-items="@(new SelectList(Model.Genders))" class="form-select"></select>
-
-                    <label asp-for="SelectedThickness">Tykkelse (mm)</label>
-                    <select asp-for="SelectedThickness" asp-items="@(new SelectList(Model.Thicknesses))" class="form-select">
-                        <option value="">(Valgfri)</option>
-                    </select>
-
-                    </div>
-                }
-                else if (Model.Representative is Tank)
-                {
-                }
-                else if (Model.Representative is RegulatorSet)
-                {
-                    var rs = Model.Representative as RegulatorSet;
-                    <div class="mb-3">
-                        <strong>2. Trin:</strong> @rs.SecondStep
-                    </div>
-                    <div class="mb-3">
-                        <strong>Octopus:</strong> @rs.Octopus
-                    </div>
-                }
-                else if (Model.Representative is MaskSnorkel)
-                {
-                    <div class="mb-3">
-                        
+                        <label class="mt-2">Tykkelse (mm)</label>
+                        <select name="selectedThickness" class="form-select">
+                            <option value="">(Valgfri)</option>
+                            @foreach (var t in Model.Thicknesses)
+                            {
+                                <option value="@(t?.ToString() ?? "")">@t</option>
+                            }
+                        </select>
                     </div>
                 }
                 else if (Model.Representative is Finns)
                 {
                     <div class="mb-3">
-                        <label asp-for="SelectedProductId">Størrelse</label>
-                        <select asp-for="SelectedProductId" asp-items="@(new SelectList(Model.Variants.OfType<Finns>(), "ProductId", "Sizes"))" class="form-select"></select>
+                        <label>Størrelse</label>
+                        <select name="selectedProductId" class="form-select"
+                                asp-items="@(new SelectList(Model.Variants.OfType<Finns>(), "ProductId", "Sizes"))">
+                            <option value="">-- Vælg --</option>
+                        </select>
                     </div>
                 }
+                <!-- Andre product-typer: tilsvarende patterns -->
+
                 <button type="submit" class="btn btn-primary">Tilføj til kurv</button>
+
+                @* Vis TempData beskeder *@
+                @if (TempData["Error"] != null)
+                {
+                    <div class="alert alert-danger mt-3">@TempData["Error"]</div>
+                }
+                @if (TempData["Success"] != null)
+                {
+                    <div class="alert alert-success mt-3">@TempData["Success"]</div>
+                }
             </form>
 
             <!--HERTIL-->

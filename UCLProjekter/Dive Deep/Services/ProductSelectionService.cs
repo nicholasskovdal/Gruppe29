@@ -11,14 +11,9 @@ namespace Dive_Deep.Services
             _productRepo = productRepo;
         }
 
-        public async Task<int?> FindDivingSuitId(ProductDetailsViewModel vm)
+        public async Task<int?> FindDivingSuitId(string brand, string model, string size, string gender, string? thickness)
         {
-            var suit = await _productRepo.FindMatchingDivingSuitAsync(
-                vm.Representative.Brand,
-                vm.RepresentativeSecondaryValue,
-                vm.SelectedSize,
-                vm.SelectedGender,
-                vm.SelectedThickness);
+            var suit = await _productRepo.FindMatchingDivingSuitAsync(brand, model, size, gender, thickness);
             return suit?.ProductId;
         }
 

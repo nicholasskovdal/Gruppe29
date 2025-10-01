@@ -25,6 +25,7 @@ namespace Dive_Deep
             builder.Services.AddScoped<IProductRepository, ProductRepository>(); //ikke default
             builder.Services.AddScoped<IBookingRepository, BookingRepository>(); //ikke default
             builder.Services.AddScoped<BookingService>();
+            builder.Services.AddScoped<ProductSelectionService>();
 
 
             builder.Services.AddControllersWithViews(); //ikke default

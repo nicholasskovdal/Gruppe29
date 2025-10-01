@@ -1,5 +1,6 @@
 ﻿using Dive_Deep.Data;
 using Dive_Deep.Models;
+using Dive_Deep.Services;
 using Dive_Deep.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,10 +15,12 @@ namespace Dive_Deep.Controllers
     {
         private readonly DiveDeepContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-        public CartController(DiveDeepContext context, UserManager<ApplicationUser> userManager)
+        private readonly ProductSelectionService _productSelectionService;
+        public CartController(DiveDeepContext context, UserManager<ApplicationUser> userManager, ProductSelectionService productSelectionService)
         {
             _context = context;
             _userManager = userManager;
+            _productSelectionService = productSelectionService;
         }
 
 
@@ -30,7 +33,7 @@ namespace Dive_Deep.Controllers
             var cart = await _context.Carts  //---------------------------------------------------Hent cart, inkl. forbundne cartItem, og cartItems forbunde Product for den Cart med ApplicationUserId der matcher Id med bruger som er logget ind
                 .Include(c => c.Items)
                 .ThenInclude(i => i.Product)
-                .FirstOrDefaultAsync(c => c.ApplicationUserId == user.Id); 
+                .FirstOrDefaultAsync(c => c.ApplicationUserId == user.Id);
 
             if (cart == null)     //-------------------------------------------------------------------opret cart til brugeren i db hvis der ikke er en
             {
@@ -73,46 +76,87 @@ namespace Dive_Deep.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Add(int productId) //------til Product/Details View, for at Post <form> til Cart
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Add(
+            int? selectedProductId,
+            string? selectedSize,
+            string? selectedGender,
+            string? selectedThickness,
+            int? representativeId,
+            string? brand,
+            string? model)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return Challenge();
 
+            // Find eller opret cart
             var cart = await _context.Carts
                 .Include(c => c.Items)
                 .FirstOrDefaultAsync(c => c.ApplicationUserId == user.Id);
 
             if (cart == null)
             {
-                cart = new Cart { ApplicationUserId = user.Id};
+                cart = new Cart { ApplicationUserId = user.Id };
                 _context.Carts.Add(cart);
+                await _context.SaveChangesAsync();
             }
 
-            var existingItem = cart.Items.FirstOrDefault(i => i.ProductId == productId);
-            if(existingItem != null)
+            // RESOLVE productId
+            int resolvedId = selectedProductId ?? 0;
+
+            if (resolvedId == 0)
             {
-                return RedirectToAction("Index"); //----------------hvis produktet allerede er i kurven kan den ikke lægges i igen, der er kun 1. viser bare kurven hvis det sker
-            }
-            else
-            {
-                cart.Items.Add(new CartItem
+                // Prøv at resolve via diving suit lookup (kræver brand+model+size+gender)
+                if (string.IsNullOrWhiteSpace(brand) || string.IsNullOrWhiteSpace(model)
+                    || string.IsNullOrWhiteSpace(selectedSize) || string.IsNullOrWhiteSpace(selectedGender))
                 {
-                    ProductId = productId
-                });
+                    TempData["Error"] = "Du skal vælge alle nødvendige felter for at vælge en variant.";
+                    return RedirectToAction("Details", "Products", new { id = representativeId ?? 0 });
+                }
+
+                // Kald ProductSelectionService (overload med primitive parametre)
+                var id = await _productSelectionService.FindDivingSuitId(brand, model, selectedSize, selectedGender, selectedThickness);
+                if (!id.HasValue)
+                {
+                    TempData["Error"] = "Kunne ikke finde en variant, der matcher dine valg.";
+                    return RedirectToAction("Details", "Products", new { id = representativeId ?? 0 });
+                }
+
+                resolvedId = id.Value;
             }
 
+            // Duplicate check
+            var existingItem = cart.Items.FirstOrDefault(i => i.ProductId == resolvedId);
+            if (existingItem != null)
+            {
+                TempData["Error"] = "Produktet ligger allerede i din kurv.";
+                return RedirectToAction("Details", "Products", new { id = representativeId ?? 0 });
+            }
+
+            // Tilføj item
+            cart.Items.Add(new CartItem { ProductId = resolvedId, CartId = cart.CartId });
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index");
+            TempData["Success"] = "Produkt tilføjet til kurv.";
+            return RedirectToAction("Index", "Cart");
+        }
+
+        [HttpGet]
+        public IActionResult Add(int productId)
+        {
+            if (productId == 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("Details", "Products", new {id =  productId});
         }
 
 
 
 
-        [HttpPost]
         public async Task<IActionResult> Remove(int itemId)
         {
-            var user = await _userManager.GetUserAsync (User);
+            var user = await _userManager.GetUserAsync(User);
             if (user == null) return Challenge();
 
             var cart = await _context.Carts
@@ -128,7 +172,7 @@ namespace Dive_Deep.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Cart");
         }
     }
 }
