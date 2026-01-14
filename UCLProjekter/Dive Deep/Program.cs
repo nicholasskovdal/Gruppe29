@@ -25,13 +25,13 @@ namespace Dive_Deep
             builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false) //ikke default
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<DiveDeepContext>();
-            
+
             //INFO OM SERVICES OG SCOPED
             //Server inject
             //.Services er en collection af services
             //Builder er en WebApplikationsBuilder der bruges til at konfigurere services
             //Services er dependency injection-containeren. ASP.NET Core bruger denne container til automatisk at oprette objekter og injicere dem, fx i controllers eller services.
-            //Fortælle objektets levetid. Scoped er én instans pr http request. AddpScoped betyder Én ny instans på request. (AddSingleton = Én instans i hele applikationen)
+            //AddScoped fortæller objektets levetid. Scoped er én instans pr http request. AddScoped betyder Én ny instans på request. (AddSingleton = Én instans i hele applikationen)
             //Her sker koblingen mellem interface og implementering. f.eks. (IProductRepo og ProductRepo) --> Når noget beder om IProductRepository, så giv dem en ProductRepository
             //Low coupling --> Klasser kender så lidt som muligt til hinandens konkrete implementeringer. Derfor vi bruger Private Readonly i controlleren
 

@@ -18,8 +18,6 @@ namespace Dive_Deep.Controllers
             _productRepo = productRepo;
         }
 
-
-
         public async Task<IActionResult> Index(string category)
         {
             var products = await _productRepo.GetGroupedProductsByCategory(category);
